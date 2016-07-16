@@ -31,7 +31,7 @@ class Application(tkinter.Frame):
         self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt)
         print(self.csv_file)
         print(type(self.csv_file))
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, header=None, names="SSID"))  # usecols="SSID" gives "ValueError: Usecols do not match names." probably because I need to use skipinitalspace
+        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=['SSID']))  # usecols="SSID" gives "ValueError: Usecols do not match names." probably because I need to use skipinitalspace
 
 
 root = tkinter.Tk()
