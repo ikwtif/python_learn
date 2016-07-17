@@ -30,10 +30,11 @@ class Application(tkinter.Frame):
 
     def askopenfilename(self):
         self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt)
-        print(self.csv_file)
-        # print(type(self.csv_file))
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]))
-        print(pd.DataFrame.drop_duplicates(self.csv_file))
+        print(self.csv_file) # print for debug
+        print(type(self.csv_file)) #print for debug
+
+    def ssidlist(self):
+        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]) .drop_duplicates())
         print(self.csv_file)
 
 
