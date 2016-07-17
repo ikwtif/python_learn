@@ -4,6 +4,7 @@ import getpass
 import pandas as pd
 
 
+
 class Application(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -30,8 +31,10 @@ class Application(tkinter.Frame):
     def askopenfilename(self):
         self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt)
         print(self.csv_file)
-        print(type(self.csv_file))
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=['SSID']))  # usecols="SSID" gives "ValueError: Usecols do not match names." probably because I need to use skipinitalspace
+        # print(type(self.csv_file))
+        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]))
+        print(pd.DataFrame.drop_duplicates(self.csv_file))
+        print(self.csv_file)
 
 
 root = tkinter.Tk()
