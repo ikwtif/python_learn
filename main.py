@@ -1,8 +1,7 @@
 # version 0.1.5
 import tkinter.filedialog
 import getpass
-import pandas as pd
-
+import pandas as pd  # Renames imported library to "pd"
 
 
 class Application(tkinter.Frame):
@@ -30,11 +29,12 @@ class Application(tkinter.Frame):
 
     def askopenfilename(self):
         self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt)
-        print(self.csv_file) # print for debug
-        print(type(self.csv_file)) #print for debug
+        print(self.csv_file)  # print for debug
+        print(type(self.csv_file))  # print for debug
+        self.csvfilter()
 
-    def ssidlist(self):
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]) .drop_duplicates())
+    def csvfilter(self):
+        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]).drop_duplicates())
         print(self.csv_file)
 
 
