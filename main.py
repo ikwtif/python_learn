@@ -9,29 +9,54 @@ class Application(tkinter.Frame):
         super().__init__(master)
         self.quit = tkinter.Button(self, text="QUIT", fg="red", command=root.destroy)
         self.select_csv_file = tkinter.Button(self)
+        self.save_txt_file = tkinter.Button(self)
         self.pack()
-        self.create_widgets()
-        self.file_opt = options = {}
+        self.selectfilewidget()
+        self.savefilewidget()
+        self.quitwidget()
+        self.file_opt_open = options_open = {}
+        self.file_opt_save = options_save = {}
         self.user = getpass.getuser()
         self.csv_file = None
-        options['defaultextension'] = '.csv'
-        options['filetypes'] = [('Comma Separated Value', '.csv'), ]
-        options['initialdir'] = 'C:/Users/%s/desktop/' % self.user
-        options['parent'] = root
-        options['title'] = 'Select CSV file'
-        options['multiple'] = 'False'
+        self.txt_file = None
 
-    def create_widgets(self):
+        options_open['defaultextension'] = '.csv'
+        options_open['filetypes'] = [('Comma Separated Value', '.csv'), ]
+        options_open['initialdir'] = 'C:/Users/%s/desktop/' % self.user
+        options_open['parent'] = root
+        options_open['title'] = 'Select CSV file'
+        options_open['multiple'] = 'False'
+
+        options_save['defaultextension'] = '.txt'
+        options_save['filetypes'] = [('Text File', '.txt'), ]
+        options_save['initialdir'] = 'C:/Users/%s/desktop/' % self.user
+        options_save['parent'] = root
+        options_save['title'] = 'Select .txt File Save Location'
+        #options_save['multiple'] = 'False'
+
+    def selectfilewidget(self):
         self.select_csv_file["text"] = "Select File"
         self.select_csv_file["command"] = self.askopenfilename
         self.select_csv_file.pack(side="top")
+
+    def savefilewidget(self):
+        self.save_txt_file["text"] = "Output Location"
+        self.save_txt_file["command"] = self.asksavefilename
+        self.save_txt_file.pack(side="top")
+
+    def quitwidget(self):
         self.quit.pack(side="bottom")
 
     def askopenfilename(self):
-        self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt)
+        self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt_open)
         print(self.csv_file)  # print for debug
         print(type(self.csv_file))  # print for debug
         self.csvfilter()
+
+    def asksavefilename(self):
+        self.txt_file = tkinter.filedialog.asksaveasfilename(**self.file_opt_save)
+        print(self.txt_file)  # print for debug
+        print(type(self.txt_file))  # print for debug
 
     def csvfilter(self):
         print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]).drop_duplicates())
