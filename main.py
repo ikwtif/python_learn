@@ -10,15 +10,18 @@ class Application(tkinter.Frame):
         self.quit = tkinter.Button(self, text="QUIT", fg="red", command=root.destroy)
         self.select_csv_file = tkinter.Button(self)
         self.save_txt_file = tkinter.Button(self)
+        self.convert_file = tkinter.Button(self)
         self.pack()
         self.selectfilewidget()
         self.savefilewidget()
+        self.convertwidget()
         self.quitwidget()
         self.file_opt_open = options_open = {}
         self.file_opt_save = options_save = {}
         self.user = getpass.getuser()
         self.csv_file = None
         self.txt_file = None
+        self.convert_file = None
 
         options_open['defaultextension'] = '.csv'
         options_open['filetypes'] = [('Comma Separated Value', '.csv'), ]
@@ -32,7 +35,7 @@ class Application(tkinter.Frame):
         options_save['initialdir'] = 'C:/Users/%s/desktop/' % self.user
         options_save['parent'] = root
         options_save['title'] = 'Select .txt File Save Location'
-        #options_save['multiple'] = 'False'
+        # options_save['multiple'] = 'False'
 
     def selectfilewidget(self):
         self.select_csv_file["text"] = "Select File"
@@ -44,6 +47,11 @@ class Application(tkinter.Frame):
         self.save_txt_file["command"] = self.asksavefilename
         self.save_txt_file.pack(side="top")
 
+    def convertwidget(self):
+        self.convert_file["text"] = "Convert CSV File"
+        self.convert_file["command"] = self.csvfilter
+        self.convert_file.pack(side="top")
+
     def quitwidget(self):
         self.quit.pack(side="bottom")
 
@@ -51,7 +59,7 @@ class Application(tkinter.Frame):
         self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt_open)
         print(self.csv_file)  # print for debug
         print(type(self.csv_file))  # print for debug
-        self.csvfilter()
+        #  self.csvfilter()
 
     def asksavefilename(self):
         self.txt_file = tkinter.filedialog.asksaveasfilename(**self.file_opt_save)
@@ -59,8 +67,10 @@ class Application(tkinter.Frame):
         print(type(self.txt_file))  # print for debug
 
     def csvfilter(self):
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"]).drop_duplicates())
-        print(self.csv_file)
+        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"])
+              .drop_duplicates()
+              .to_csv(path_or_buf=self.txt_file))
+        print(self.txt_file)
 
 
 root = tkinter.Tk()
