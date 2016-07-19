@@ -70,7 +70,6 @@ class Application(tkinter.Frame):
         print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"])
               .drop_duplicates()
               .to_csv(path_or_buf=self.txt_file))
-        print(self.txt_file)
 
 
 root = tkinter.Tk()
