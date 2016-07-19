@@ -7,7 +7,7 @@ import pandas as pd  # Renames imported library to "pd"
 class Application(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.quit = tkinter.Button(self, text="QUIT", fg="red", command=root.destroy)
+        self.quit = tkinter.Button(self)
         self.select_csv_file = tkinter.Button(self)
         self.save_txt_file = tkinter.Button(self)
         self.convert_file = tkinter.Button(self)
@@ -49,11 +49,14 @@ class Application(tkinter.Frame):
 
     def convertwidget(self):
         self.convert_file["text"] = "Convert CSV File"
-        self.convert_file["command"] = self.csvfilter
+        self.convert_file["command"] = self.conversion
         self.convert_file.pack(side="top")
 
     def quitwidget(self):
         self.quit.pack(side="bottom")
+        self.quit["text"] = "QUIT"
+        self.quit["fg"] = "red"
+        self.quit["command"] = root.destroy
 
     def askopenfilename(self):
         self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt_open)
@@ -66,7 +69,7 @@ class Application(tkinter.Frame):
         print(self.txt_file)  # print for debug
         print(type(self.txt_file))  # print for debug
 
-    def csvfilter(self):
+    def conversion(self):
         print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"])
               .drop_duplicates()
               .to_csv(path_or_buf=self.txt_file))
