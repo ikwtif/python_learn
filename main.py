@@ -1,4 +1,3 @@
-# version 0.1.5
 import tkinter.filedialog
 import getpass
 import pandas as pd  # Renames imported library to "pd"
