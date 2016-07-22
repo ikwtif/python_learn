@@ -69,7 +69,7 @@ class Application(tkinter.Frame):
         print(type(self.txt_file))  # print for debug
 
     def conversion(self):
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"])
+        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"], encoding='utf_8_sig')
               .drop_duplicates()
               .to_csv(path_or_buf=self.txt_file))
 
