@@ -1,80 +1,87 @@
-import tkinter.filedialog
+import tkinter as tk
+from tkinter import ttk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 import getpass
 import pandas as pd  # Renames imported library to "pd"
 
 
-class Application(tkinter.Frame):
+'''The point of a computer is ....
+... To do repetitive tasks for you. If you find yourself copy and pasteing
+code 13 times, you are doing the computer's job!'''
+
+
+class Application(tk.Frame):
     def __init__(self, master=None):
-        super().__init__(master)
-        self.quit = tkinter.Button(self)
-        self.select_csv_file = tkinter.Button(self)
-        self.save_txt_file = tkinter.Button(self)
-        self.convert_file = tkinter.Button(self)
-        self.pack()
-        self.selectfilewidget()
-        self.savefilewidget()
-        self.convertwidget()
-        self.quitwidget()
-        self.file_opt_open = options_open = {}
-        self.file_opt_save = options_save = {}
+        tk.Frame.__init__(self, master)
         self.user = getpass.getuser()
         self.csv_file = None
         self.txt_file = None
         self.convert_file = None
+        self.initialise()
+        self.createwidgets()
+        
+    def initialise(self):
+        OPTION = [
+            'defaultextension',
+            'filetypes',
+            'initialdir',
+            'parent',
+            'title',
+            'multiple'
+            ]
 
-        options_open['defaultextension'] = '.csv'
-        options_open['filetypes'] = [('Comma Separated Value', '.csv'), ]
-        options_open['initialdir'] = 'C:/Users/%s/desktop/' % self.user
-        options_open['parent'] = root
-        options_open['title'] = 'Select CSV file'
-        options_open['multiple'] = 'False'
+        OPTION_OPEN = [
+            '.csv',
+            {('Comma Separated Value', '.csv'), },
+            'C:/Users/{}/desktop/'.format(self.user),
+            root,
+            'Select CSV file',
+            'False'
+            ]
 
-        options_save['defaultextension'] = '.txt'
-        options_save['filetypes'] = [('Text File', '.txt'), ]
-        options_save['initialdir'] = 'C:/Users/%s/desktop/' % self.user
-        options_save['parent'] = root
-        options_save['title'] = 'Select .txt File Save Location'
-        # options_save['multiple'] = 'False'
+        OPTION_SAVE = [
+            '.txt',
+            {('Text File', '.txt'), },
+            'C:/Users/{}/desktop/'.format(self.user),
+            root,
+            'Select .txt File Save Location',
+            None
+            ]
+        
+        self.file_opt_open = dict(zip(OPTION, OPTION_OPEN))
+        self.file_opt_save = dict(zip(OPTION, OPTION_SAVE))
 
-    def selectfilewidget(self):
-        self.select_csv_file["text"] = "Select File"
-        self.select_csv_file["command"] = self.askopenfilename
-        self.select_csv_file.pack(side="top")
 
-    def savefilewidget(self):
-        self.save_txt_file["text"] = "Output Location"
-        self.save_txt_file["command"] = self.asksavefilename
-        self.save_txt_file.pack(side="top")
-
-    def convertwidget(self):
-        self.convert_file["text"] = "Convert CSV File"
-        self.convert_file["command"] = self.conversion
-        self.convert_file.pack(side="top")
-
-    def quitwidget(self):
+    def createwidgets(self):
+        widgets = tk.Frame(self)
+        self.quit = ttk.Button(widgets, text = "QUIT", command = root.destroy)
         self.quit.pack(side="bottom")
-        self.quit["text"] = "QUIT"
-        self.quit["fg"] = "red"
-        self.quit["command"] = root.destroy
+        self.select_csv_file = ttk.Button(widgets, text = "Select File", command = self.askopenfilename)
+        self.select_csv_file.pack(side="top")
+        self.save_txt_file = ttk.Button(widgets, text = "Output Location", command = self.asksavefilename)
+        self.save_txt_file.pack(side="top")
+        self.convert_file = ttk.Button(widgets, text = "Convert CSV File", command = self.conversion)
+        self.convert_file.pack(side="top")
+        widgets.pack()
+
 
     def askopenfilename(self):
-        self.csv_file = tkinter.filedialog.askopenfilename(**self.file_opt_open)
+        self.csv_file = askopenfilename(**self.file_opt_open)
         print(self.csv_file)  # print for debug
         print(type(self.csv_file))  # print for debug
-        #  self.csvfilter()
 
     def asksavefilename(self):
-        self.txt_file = tkinter.filedialog.asksaveasfilename(**self.file_opt_save)
+        self.txt_file = asksaveasfilename(**self.file_opt_save)
         print(self.txt_file)  # print for debug
         print(type(self.txt_file))  # print for debug
 
     def conversion(self):
-        print(pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"], encoding='utf_8_sig')
-              .drop_duplicates()
-              .to_csv(path_or_buf=self.txt_file))
+        pd.read_csv(self.csv_file, skipinitialspace=False, usecols=["SSID"], encoding='utf_8_sig').drop_duplicates().to_csv(path_or_buf=self.txt_file)
 
 
-root = tkinter.Tk()
-root.wm_title("CSV to TXT Converter")
-app = Application(master=root)
-app.mainloop()
+if __name__ == "__main__":        
+    root = tk.Tk()
+    root.wm_title("CSV to TXT Converter")
+    window = Application(root)
+    window.pack()
+    root.mainloop()
